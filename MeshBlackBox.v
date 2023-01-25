@@ -23,24 +23,24 @@ module MeshBlackBox
 
     //******************** FILL THIS ***************************
 
-    // TILEROWS=1, TILECOLUMNS=1·Î °¡Á¤ÇÑ´Ù.
-    // PE_ColÀÇ ÀÔ·Â¿¡ °üÇÑ wire¸¦ ¼±¾ğÇÑ´Ù,
+    // TILEROWS=1, TILECOLUMNS=1ë¡œ ê°€ì •í•œë‹¤.
+    // PE_Colì˜ ì…ë ¥ì— ê´€í•œ wireë¥¼ ì„ ì–¸í•œë‹¤,
     wire signed [INPUT_BITWIDTH-1:0] new_in_a [MESHROWS-1:0];
     wire signed [INPUT_BITWIDTH-1:0] new_in_b [MESHCOLUMNS-1:0];
     wire new_in_control_propagate [MESHCOLUMNS-1:0];
     wire new_in_valid [MESHCOLUMNS-1:0];
-    // input activationsÀÇ internal signalÀ» 2dimÀ¸·Î ¼±¾ğÇÑ´Ù
+    // input activationsì˜ internal signalì„ 2dimìœ¼ë¡œ ì„ ì–¸í•œë‹¤
     wire signed [INPUT_BITWIDTH-1:0] inter_a [MESHCOLUMNS-1:0][MESHROWS-1:0];
 
     genvar i, j, k;
-    // PE_ColÀÇ input activation¿¡ °üÇÑ inputÀ» »õ·Ó°Ô ¼±¾ğÇÑ wire¿Í ¿¬°áÇÑ´Ù
+    // PE_Colì˜ input activationì— ê´€í•œ inputì„ ìƒˆë¡­ê²Œ ì„ ì–¸í•œ wireì™€ ì—°ê²°í•œë‹¤
     generate
         for (i = 0; i < MESHROWS; i += 1) begin
             assign new_in_a[i] = in_a[i][0];
         end
     endgenerate
 
-    // PE_ColÀÇ weight, control propagate, valid¿¡ °üÇÑ inputÀ» »õ·Ó°Ô ¼±¾ğÇÑ wire¿Í ¿¬°áÇÑ´Ù
+    // PE_Colì˜ weight, control propagate, validì— ê´€í•œ inputì„ ìƒˆë¡­ê²Œ ì„ ì–¸í•œ wireì™€ ì—°ê²°í•œë‹¤
     generate
         for (j = 0; j < MESHCOLUMNS; j += 1) begin
             assign new_in_b[j] = in_b[j][0];
@@ -49,12 +49,12 @@ module MeshBlackBox
         end
     endgenerate
     
-    // PE_Col ¸ğµâÀ» ¾Õ¼­ ¼±¾ğÇÑ internal signalÀ» ÀÌ¿ëÇÏ¿© Çà¹æÇâÀ¸·Î ¿¬°áÇÑ´Ù
+    // PE_Col ëª¨ë“ˆì„ ì•ì„œ ì„ ì–¸í•œ internal signalì„ ì´ìš©í•˜ì—¬ í–‰ë°©í–¥ìœ¼ë¡œ ì—°ê²°í•œë‹¤
     generate
         for (k = 0; k < MESHCOLUMNS; k += 1) begin
-            //°¡Àå Ã¹¹ø¤Š ¿­ÀÇ PE_Col¿¡ ¿ÜºÎ inputÀÎ in_a, in_b, in_control_propagate, in_valid¸¦ ¿¬°áÇÏ°í
-            //out_aÀº internal signal°ú ¿¬°áÇÏ°í
-            //out_c, out_valid´Â ¿ÜºÎ output¿¡ ¿¬°áÇÑ´Ù
+            //ê°€ì¥ ì²«ë²ˆì§¸ ì—´ì˜ PE_Colì— ì™¸ë¶€ inputì¸ in_a, in_b, in_control_propagate, in_validë¥¼ ì—°ê²°í•˜ê³ 
+            //out_aì€ internal signalê³¼ ì—°ê²°í•˜ê³ 
+            //out_c, out_validëŠ” ì™¸ë¶€ outputì— ì—°ê²°í•œë‹¤
             if (k == 0) begin
                 PE_Col # (.MESHROWS(MESHROWS), .INPUT_BITWIDTH(INPUT_BITWIDTH), .OUTPUT_BITWIDTH(OUTPUT_BITWIDTH)) pe_col (
                     .clock(clock),
@@ -67,9 +67,9 @@ module MeshBlackBox
                     .col_out_c(out_c[k][0]),
                     .col_out_valid(out_valid[k][0])
                 );
-            //³ª¸ÓÁö ¿­ÀÇ PE_Col´Â ¿ÜºÎ inputÀÎ in_b, in_control_propagate, in_valid¸¦ ¿¬°áÇÏ°í
-            //in_a, out_aÀº internal signal°ú ¿¬°áÇÏ°í
-            //out_c, out_valid´Â ¿ÜºÎ output¿¡ ¿¬°áÇÑ´Ù
+            //ë‚˜ë¨¸ì§€ ì—´ì˜ PE_ColëŠ” ì™¸ë¶€ inputì¸ in_b, in_control_propagate, in_validë¥¼ ì—°ê²°í•˜ê³ 
+            //in_a, out_aì€ internal signalê³¼ ì—°ê²°í•˜ê³ 
+            //out_c, out_validëŠ” ì™¸ë¶€ outputì— ì—°ê²°í•œë‹¤
             end else begin
                 PE_Col # (.MESHROWS(MESHROWS), .INPUT_BITWIDTH(INPUT_BITWIDTH), .OUTPUT_BITWIDTH(OUTPUT_BITWIDTH)) pe_col (
                     .clock(clock),
@@ -88,7 +88,7 @@ module MeshBlackBox
 endmodule // MeshBlackBox
 
 //********** FEEL FREE TO ADD MODULES HERE *****************
-module PE_Col // PE¸ğµâÀ» °°Àº ¿­³¢¸® ¿¬°áÇÑ ¸ğµâÀÌ´Ù
+module PE_Col // PEëª¨ë“ˆì„ ê°™ì€ ì—´ë¼ë¦¬ ì—°ê²°í•œ ëª¨ë“ˆì´ë‹¤
     #(parameter MESHROWS, INPUT_BITWIDTH, OUTPUT_BITWIDTH)
     (
         input clock,
@@ -103,23 +103,23 @@ module PE_Col // PE¸ğµâÀ» °°Àº ¿­³¢¸® ¿¬°áÇÑ ¸ğµâÀÌ´Ù
         output col_out_valid
     );
        
-    // weight¿Í ºÎºĞÇÕÀÇ internal signalÀ» ¼±¾ğÇÑ´Ù
+    // weightì™€ ë¶€ë¶„í•©ì˜ internal signalì„ ì„ ì–¸í•œë‹¤
     wire signed [INPUT_BITWIDTH-1:0] inter_b [MESHROWS-1:0];
     wire signed [OUTPUT_BITWIDTH-1:0] inter_c [MESHROWS-1:0];
-    // control propagate¿Í validÀÇ internal signalÀ» ¼±¾ğÇÑ´Ù
+    // control propagateì™€ validì˜ internal signalì„ ì„ ì–¸í•œë‹¤
     wire inter_propagate [MESHROWS-1:0];
     wire inter_valid [MESHROWS-1:0];
-    // Ã¹¹øÂ° ÇàÀÇ PE¿¡ ÀÔ·ÂµÇ´Â ºÎºĞÇÕÀÇ °ªÀº 0À¸·Î ÀÌ¸¦ Á¤ÀÇÇÑ´Ù.
+    // ì²«ë²ˆì§¸ í–‰ì˜ PEì— ì…ë ¥ë˜ëŠ” ë¶€ë¶„í•©ì˜ ê°’ì€ 0ìœ¼ë¡œ ì´ë¥¼ ì •ì˜í•œë‹¤.
     wire signed [OUTPUT_BITWIDTH-1:0] init_c;
     assign init_c = 0;
 
-    // PE¸ğµâÀ» ¿­¹æÇâÀ¸·Î ¿¬°áÇÑ´Ù
+    // PEëª¨ë“ˆì„ ì—´ë°©í–¥ìœ¼ë¡œ ì—°ê²°í•œë‹¤
     genvar i;
     generate
         for (i = 0; i < MESHROWS; i += 1) begin
-            //°¡Àå Ã¹¹ø¤Š ÇàÀÇ PE¿¡ ¿ÜºÎ inputÀÎ ºÎºĞÇÕ °ª¿¡ 0À» ÀÔ·ÂÇÏ°í
-            //³ª¸ÓÁö b, out_c, propagate control, valid´Â internal signal°ú ¿¬°áÇÑ´Ù.
-            //input activationÀº ¿ÜºÎ input, output°ú ¿¬°áÇÑ´Ù(´Ù¸¥Çàµéµµ µ¿ÀÏ).
+            //ê°€ì¥ ì²«ë²ˆ í–‰ì˜ PEì— ì™¸ë¶€ inputì¸ ë¶€ë¶„í•© ê°’ì— 0ì„ ì…ë ¥í•˜ê³ 
+            //ë‚˜ë¨¸ì§€ b, out_c, propagate control, validëŠ” internal signalê³¼ ì—°ê²°í•œë‹¤.
+            //input activationì€ ì™¸ë¶€ input, outputê³¼ ì—°ê²°í•œë‹¤(ë‹¤ë¥¸í–‰ë“¤ë„ ë™ì¼).
             if (i == 0) begin
                 PE #(.INPUT_BITWIDTH(INPUT_BITWIDTH), .OUTPUT_BITWIDTH(OUTPUT_BITWIDTH)) pe (
                     .clock(clock),
@@ -134,8 +134,8 @@ module PE_Col // PE¸ğµâÀ» °°Àº ¿­³¢¸® ¿¬°áÇÑ ¸ğµâÀÌ´Ù
                     .pe_out_c(inter_c[i]),
                     .pe_out_control_propagate(inter_propagate[i]),
                     .pe_out_valid(inter_valid[i]));
-            //°¡Àå ¸¶Áö¸· ÇàÀÇ PE¿¡ ¿ÜºÎ outputÀÎ out_c¿Í out_valid¸¦ ¿¬°áÇÏ¸ç
-            //³ª¸ÓÁö b, in_c, propagate control, in_valid´Â internal signal°ú ¿¬°áÇÑ´Ù.
+            //ê°€ì¥ ë§ˆì§€ë§‰ í–‰ì˜ PEì— ì™¸ë¶€ outputì¸ out_cì™€ out_validë¥¼ ì—°ê²°í•˜ë©°
+            //ë‚˜ë¨¸ì§€ b, in_c, propagate control, in_validëŠ” internal signalê³¼ ì—°ê²°í•œë‹¤.
             end else if (i == MESHROWS - 1) begin
                 PE #(.INPUT_BITWIDTH(INPUT_BITWIDTH), .OUTPUT_BITWIDTH(OUTPUT_BITWIDTH)) pe (
                     .clock(clock),
@@ -150,8 +150,8 @@ module PE_Col // PE¸ğµâÀ» °°Àº ¿­³¢¸® ¿¬°áÇÑ ¸ğµâÀÌ´Ù
                     .pe_out_c(col_out_c),
                     .pe_out_control_propagate(inter_propagate[i]),
                     .pe_out_valid(col_out_valid));
-            //Áß°£ ÇàµéÀÇ PE´Â ¿ÜºÎ outputÀÎ out_c¿Í out_valid¸¦ ¿¬°áÇÏ¸ç
-            //b, c, propagate control, valid´Â internal signal°ú ¿¬°áÇÑ´Ù.
+            //ì¤‘ê°„ í–‰ë“¤ì˜ PEëŠ” ì™¸ë¶€ outputì¸ out_cì™€ out_validë¥¼ ì—°ê²°í•˜ë©°
+            //b, c, propagate control, validëŠ” internal signalê³¼ ì—°ê²°í•œë‹¤.
             end else begin
                 PE #(.INPUT_BITWIDTH(INPUT_BITWIDTH), .OUTPUT_BITWIDTH(OUTPUT_BITWIDTH)) pe (
                     .clock(clock),
@@ -172,7 +172,7 @@ module PE_Col // PE¸ğµâÀ» °°Àº ¿­³¢¸® ¿¬°áÇÑ ¸ğµâÀÌ´Ù
 
 endmodule // PE_Col
 
-module PE  // PE ´ÜÀÏ ¸ğµâ¿¡ ÇØ´çÇÑ´Ù
+module PE  // PE ë‹¨ì¼ ëª¨ë“ˆì— í•´ë‹¹í•œë‹¤
     #(parameter INPUT_BITWIDTH, OUTPUT_BITWIDTH)
     (
         input wire clock,
@@ -190,14 +190,14 @@ module PE  // PE ´ÜÀÏ ¸ğµâ¿¡ ÇØ´çÇÑ´Ù
         output reg pe_out_valid
     );
     
-    // weightÀÇ Double buffer register¸¦ ¼±¾ğÇÑ´Ù
+    // weightì˜ Double buffer registerë¥¼ ì„ ì–¸í•œë‹¤
     reg signed [INPUT_BITWIDTH-1:0] buf_b[1:0];
-    // Á¶°Ç¿¬»êÀÚ¸¦ ÀÌ¿ëÇÏ¿© in_control_propagateÀÇ °ª¿¡ µû¶ó µÎ°³ÀÇ buf_b Áß ÇÏ³ªÀÇ °ªÀ» 
-    //internal signal·Î ³»º¸³½´Ù(MUX±â´É)
+    // ì¡°ê±´ì—°ì‚°ìë¥¼ ì´ìš©í•˜ì—¬ in_control_propagateì˜ ê°’ì— ë”°ë¼ ë‘ê°œì˜ buf_b ì¤‘ í•˜ë‚˜ì˜ ê°’ì„ 
+    //internal signalë¡œ ë‚´ë³´ë‚¸ë‹¤(MUXê¸°ëŠ¥)
     wire signed [INPUT_BITWIDTH-1:0] mac_b = pe_in_control_propagate ? buf_b[0] : buf_b[1];
 
     always @(posedge clock or posedge reset) begin
-        // active high resetÀÌ È°¼ºÈ­ µÇ¾úÀ» ¶§ ¸ğµç reg°ªÀÌ ÃÊ±âÈ­ µÇµµ·Ï ÇÑ´Ù.
+        // active high resetì´ í™œì„±í™” ë˜ì—ˆì„ ë•Œ ëª¨ë“  regê°’ì´ ì´ˆê¸°í™” ë˜ë„ë¡ í•œë‹¤.
         if (reset) begin
             pe_out_a <= 0;
             pe_out_b <= 0;
@@ -208,10 +208,10 @@ module PE  // PE ´ÜÀÏ ¸ğµâ¿¡ ÇØ´çÇÑ´Ù
             buf_b[1] <= 0;
         end
         else begin
-            // in_valid°¡ È°¼ºÈ­ µÈ °æ¿ì weight°¡ »õ·Ó°Ô ÀúÀåµÇ°í Ãâ·ÂµÇµµ·Ï ÇÑ´Ù.
+            // in_validê°€ í™œì„±í™” ëœ ê²½ìš° weightê°€ ìƒˆë¡­ê²Œ ì €ì¥ë˜ê³  ì¶œë ¥ë˜ë„ë¡ í•œë‹¤.
             if (pe_in_valid) begin
-                // PropagateÀÇ °ª¿¡ µû¶ó ÀúÀåÇÒ weight reg¸¦ ¼±ÅÃÇÑ´Ù
-                //(¾Õ¼± MUXÀÇ Ãâ·Â¿¡ ÇØ´çÇÏ´Â buffer¿Í ´Ù¸¥ buffer°¡ ¼±ÅÃµÇµµ·ÏÇÑ´Ù.) 
+                // Propagateì˜ ê°’ì— ë”°ë¼ ì €ì¥í•  weight regë¥¼ ì„ íƒí•œë‹¤
+                //(ì•ì„  MUXì˜ ì¶œë ¥ì— í•´ë‹¹í•˜ëŠ” bufferì™€ ë‹¤ë¥¸ bufferê°€ ì„ íƒë˜ë„ë¡í•œë‹¤.) 
                 if (pe_in_control_propagate) begin
                     buf_b[1] <= pe_in_b;
                     pe_out_b <= buf_b[1];
@@ -220,9 +220,9 @@ module PE  // PE ´ÜÀÏ ¸ğµâ¿¡ ÇØ´çÇÑ´Ù
                     pe_out_b <= buf_b[0];
                 end
             end
-            // MAC °á°ú°¡ Ãâ·ÂµÇµµ·Ï ÇÑ´Ù. (c = a * b + psum)
+            // MAC ê²°ê³¼ê°€ ì¶œë ¥ë˜ë„ë¡ í•œë‹¤. (c = a * b + psum)
             pe_out_c <= pe_in_a *  mac_b +  in_c;
-            // input activation, control_propagate_valid½ÅÈ£°¡ Àü´ŞµÇµµ·Ï ÇÑ´Ù.
+            // input activation, control_propagate_validì‹ í˜¸ê°€ ì „ë‹¬ë˜ë„ë¡ í•œë‹¤.
             pe_out_a <= pe_in_a;
             pe_out_control_propagate <= pe_in_control_propagate;
             pe_out_valid <= pe_in_valid;
